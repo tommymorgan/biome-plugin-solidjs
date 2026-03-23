@@ -1,0 +1,23 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
+	"files": {
+		"includes": ["fixtures/**"]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"correctness": {
+				"noUnusedVariables": "off",
+				"noUnusedImports": "off",
+				"noUnusedFunctionParameters": "off"
+			}
+		}
+	},
+	"plugins": [
+		"./rules/solid-no-destructured-props.grit",
+		"./rules/solid-no-array-map-in-jsx.grit",
+		"./rules/solid-no-memo-in-loop.grit",
+		"./rules/solid-no-toplevel-effect.grit",
+		"./rules/solid-no-stored-jsx.grit"
+	]
+}

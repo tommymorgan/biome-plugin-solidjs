@@ -1,0 +1,29 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+// SolidJS: Do not store JSX in variables at module scope.
+// In Solid, JSX compiles to real DOM operations — not virtual DOM descriptors.
+// Storing JSX creates live DOM nodes immediately, which has side effects.
+
+// Match JSX elements that are NOT inside any function body
+or {
+	JsxElement() as $jsx where {
+		! $jsx <: within JsArrowFunctionExpression(),
+		! $jsx <: within JsFunctionDeclaration(),
+		! $jsx <: within JsFunctionExpression(),
+		register_diagnostic(
+			span = $jsx,
+			message = "SolidJS: Do not store JSX in variables. In Solid, JSX creates live DOM nodes immediately — not virtual DOM descriptors. Return JSX directly from components instead."
+		)
+	},
+
+	JsxSelfClosingElement() as $jsx where {
+		! $jsx <: within JsArrowFunctionExpression(),
+		! $jsx <: within JsFunctionDeclaration(),
+		! $jsx <: within JsFunctionExpression(),
+		register_diagnostic(
+			span = $jsx,
+			message = "SolidJS: Do not store JSX in variables. In Solid, JSX creates live DOM nodes immediately — not virtual DOM descriptors. Return JSX directly from components instead."
+		)
+	}
+}

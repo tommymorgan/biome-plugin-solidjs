@@ -1,0 +1,31 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+// SolidJS: Never destructure props in component signatures.
+// Props are reactive getter objects — destructuring severs reactivity.
+// Use `props.value` or `splitProps(props, [...])` instead.
+//
+// Detects functions that return JSX and have destructured parameters.
+// This heuristic identifies components without relying on naming conventions.
+
+or {
+	// Arrow function component: const Comp = ({ value }) => <div>...</div>
+	JsArrowFunctionExpression() as $arrow where {
+		$arrow <: contains JsObjectBindingPattern() as $pattern,
+		$arrow <: contains JsxOpeningElement(),
+		register_diagnostic(
+			span = $pattern,
+			message = "SolidJS: Do not destructure props. Props are reactive getter objects — destructuring breaks reactivity. Use `props` parameter and access `props.value`, or use `splitProps()`."
+		)
+	},
+
+	// Function declaration component: function Comp({ value }) { return <div>...</div> }
+	JsFunctionDeclaration() as $func where {
+		$func <: contains JsObjectBindingPattern() as $pattern,
+		$func <: contains JsxOpeningElement(),
+		register_diagnostic(
+			span = $pattern,
+			message = "SolidJS: Do not destructure props. Props are reactive getter objects — destructuring breaks reactivity. Use `props` parameter and access `props.value`, or use `splitProps()`."
+		)
+	}
+}

@@ -1,0 +1,20 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+// SolidJS: Never use Array.map() in JSX for reactive lists.
+// .map() runs once at component initialization and produces static DOM nodes.
+// Use <For> for arrays where order/length changes, or <Index> for stable-length lists.
+
+JsxExpressionChild() as $expr where {
+	$expr <: contains JsCallExpression() as $call where {
+		$call <: contains JsStaticMemberExpression() as $member where {
+			$member <: contains JsName() as $method where {
+				$method <: `map`
+			}
+		}
+	},
+	register_diagnostic(
+		span = $call,
+		message = "SolidJS: Do not use .map() in JSX. It runs once and produces static DOM nodes. Use <For> or <Index> for reactive lists."
+	)
+}

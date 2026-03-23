@@ -1,0 +1,19 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+// SolidJS: Reactive primitives must be created inside a reactive root.
+// createEffect/createMemo at module scope have no owner and will leak.
+// Place them inside a component or wrap with createRoot().
+
+// Match createEffect/createRenderEffect/createMemo reference identifiers
+// that are NOT inside any function body.
+JsReferenceIdentifier() as $callee where {
+	$callee <: or { `createEffect`, `createRenderEffect`, `createMemo` },
+	! $callee <: within JsArrowFunctionExpression(),
+	! $callee <: within JsFunctionDeclaration(),
+	! $callee <: within JsFunctionExpression(),
+	register_diagnostic(
+		span = $callee,
+		message = "SolidJS: Reactive primitive at module scope has no owner and will leak. Place it inside a component or wrap with createRoot()."
+	)
+}

@@ -1,0 +1,25 @@
+engine biome(1.0)
+language js(typescript, jsx)
+
+// SolidJS: Don't create reactive primitives inside loop callbacks.
+// createMemo inside .map()/.forEach()/.filter() creates a new memo on every
+// iteration, which is wasteful and likely a bug.
+
+JsCallExpression() as $outerCall where {
+	$outerCall <: contains JsStaticMemberExpression() as $member where {
+		$member <: contains JsName() as $method where {
+			$method <: or { `map`, `forEach`, `filter`, `reduce`, `flatMap` }
+		}
+	},
+	$outerCall <: contains JsArrowFunctionExpression() as $callback where {
+		$callback <: contains JsCallExpression() as $innerCall where {
+			$innerCall <: contains JsReferenceIdentifier() as $callee where {
+				$callee <: `createMemo`
+			}
+		}
+	},
+	register_diagnostic(
+		span = $innerCall,
+		message = "SolidJS: Do not call createMemo() inside loop callbacks (.map, .forEach, etc.). It creates a new memo on every iteration. Derive data inline or restructure upstream."
+	)
+}
