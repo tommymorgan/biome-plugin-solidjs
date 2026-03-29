@@ -11,6 +11,7 @@ or {
 		! $jsx <: within JsArrowFunctionExpression(),
 		! $jsx <: within JsFunctionDeclaration(),
 		! $jsx <: within JsFunctionExpression(),
+		! $jsx <: within `export default function $name() { $body }`,
 		register_diagnostic(
 			span = $jsx,
 			message = "SolidJS: Do not store JSX in variables. In Solid, JSX creates live DOM nodes immediately — not virtual DOM descriptors. Return JSX directly from components instead."
@@ -21,6 +22,7 @@ or {
 		! $jsx <: within JsArrowFunctionExpression(),
 		! $jsx <: within JsFunctionDeclaration(),
 		! $jsx <: within JsFunctionExpression(),
+		! $jsx <: within `export default function $name() { $body }`,
 		register_diagnostic(
 			span = $jsx,
 			message = "SolidJS: Do not store JSX in variables. In Solid, JSX creates live DOM nodes immediately — not virtual DOM descriptors. Return JSX directly from components instead."

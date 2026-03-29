@@ -31,3 +31,11 @@ function CreateProfilePage() {
 	});
 	return <div>Profile</div>;
 }
+
+// ✅ Inside an export default function component — correct
+export default function DefaultExportPage() {
+	createEffect(() => {
+		console.log("effect inside default export component");
+	});
+	return <div>Default Export</div>;
+}

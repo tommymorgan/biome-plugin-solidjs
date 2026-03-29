@@ -12,6 +12,7 @@ JsReferenceIdentifier() as $callee where {
 	! $callee <: within JsArrowFunctionExpression(),
 	! $callee <: within JsFunctionDeclaration(),
 	! $callee <: within JsFunctionExpression(),
+	! $callee <: within `export default function $name() { $body }`,
 	register_diagnostic(
 		span = $callee,
 		message = "SolidJS: Reactive primitive at module scope has no owner and will leak. Place it inside a component or wrap with createRoot()."

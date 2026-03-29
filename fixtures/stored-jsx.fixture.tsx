@@ -51,3 +51,12 @@ const WithError = () => {
 		</ErrorBoundary>
 	);
 };
+
+// ✅ JSX inside export default function component
+export default function DefaultExportComponent() {
+	return (
+		<Show when={true} fallback={<div>Loading</div>}>
+			<div>Content</div>
+		</Show>
+	);
+}
