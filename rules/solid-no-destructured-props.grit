@@ -5,13 +5,17 @@ language js(typescript, jsx)
 // Props are reactive getter objects — destructuring severs reactivity.
 // Use `props.value` or `splitProps(props, [...])` instead.
 //
-// Detects functions that return JSX and have destructured parameters.
-// This heuristic identifies components without relying on naming conventions.
+// Only flags parameter-level destructuring (the actual bug).
+// Body-level destructuring like `const { x } = useAuth()` is fine —
+// those are hook/context returns, not props.
 
 or {
 	// Arrow function component: const Comp = ({ value }) => <div>...</div>
+	// Only matches destructuring in the parameter list
 	JsArrowFunctionExpression() as $arrow where {
-		$arrow <: contains JsObjectBindingPattern() as $pattern,
+		$arrow <: contains JsParameters() as $params where {
+			$params <: contains JsObjectBindingPattern() as $pattern
+		},
 		$arrow <: contains JsxOpeningElement(),
 		register_diagnostic(
 			span = $pattern,
@@ -20,8 +24,11 @@ or {
 	},
 
 	// Function declaration component: function Comp({ value }) { return <div>...</div> }
+	// Only matches destructuring in the parameter list
 	JsFunctionDeclaration() as $func where {
-		$func <: contains JsObjectBindingPattern() as $pattern,
+		$func <: contains JsParameters() as $params where {
+			$params <: contains JsObjectBindingPattern() as $pattern
+		},
 		$func <: contains JsxOpeningElement(),
 		register_diagnostic(
 			span = $pattern,

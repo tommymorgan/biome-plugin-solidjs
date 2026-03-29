@@ -34,3 +34,16 @@ const processData = ({ id, name }: { id: number; name: string }) => {
 function formatUser({ firstName, lastName }: { firstName: string; lastName: string }) {
 	return `${firstName} ${lastName}`;
 }
+
+// ✅ Destructuring a hook/context return value inside a component is fine
+const HookComponent = (props: { show: boolean }) => {
+	const { user, loading } = useAuth();
+	return <div>{user()?.name}</div>;
+};
+
+// ✅ Destructuring inside a function declaration component is fine
+function PageComponent() {
+	const { params } = useSearchParams();
+	const { theme } = useContext(ThemeContext);
+	return <div>{params.id}</div>;
+}

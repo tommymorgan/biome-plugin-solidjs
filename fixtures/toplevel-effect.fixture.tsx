@@ -23,3 +23,11 @@ const store = createRoot((dispose) => {
 	const quadrupled = createMemo(() => count() * 4);
 	return { quadrupled, dispose };
 });
+
+// ✅ Inside a function declaration component — correct
+function CreateProfilePage() {
+	createEffect(() => {
+		console.log("effect inside function declaration component");
+	});
+	return <div>Profile</div>;
+}

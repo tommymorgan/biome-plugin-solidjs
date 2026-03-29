@@ -19,3 +19,35 @@ const ConditionalComponent = (props: { show: boolean }) => {
 function MyComponent(props: { prop: string }) {
 	return <span>{props.prop}</span>;
 }
+
+// ✅ JSX in Show fallback prop — idiomatic Solid control flow
+const WithShow = () => {
+	return (
+		<Show
+			when={true}
+			fallback={<div class="spinner">Loading...</div>}
+		>
+			<div>Content</div>
+		</Show>
+	);
+};
+
+// ✅ JSX in Switch/Match fallback — idiomatic Solid control flow
+const WithSwitch = () => {
+	return (
+		<Switch fallback={<div>Default</div>}>
+			<Match when={true}>
+				<div>Matched</div>
+			</Match>
+		</Switch>
+	);
+};
+
+// ✅ JSX in ErrorBoundary fallback — idiomatic Solid
+const WithError = () => {
+	return (
+		<ErrorBoundary fallback={<div>Error occurred</div>}>
+			<div>Content</div>
+		</ErrorBoundary>
+	);
+};
