@@ -11,6 +11,7 @@ Biome [GritQL](https://biomejs.dev/linter/plugins/) lint rules for [SolidJS](htt
 | `solid-no-memo-in-loop` | Flags `createMemo()` inside `.map()`, `.forEach()`, and other array method callbacks. |
 | `solid-no-toplevel-effect` | Flags `createEffect()` and `createMemo()` at module scope, where they have no reactive owner and will leak. |
 | `solid-no-stored-jsx` | Flags JSX stored in module-scope variables. Solid JSX compiles to real DOM operations, not virtual DOM descriptors. |
+| `solid-no-object-signal-without-equals` | Flags `createSignal` with an object type parameter but no custom `equals` function. Reference equality can cause unnecessary reactive updates. |
 
 ## Install
 
@@ -20,7 +21,15 @@ npm install -D biome-plugin-solidjs
 
 ## Setup
 
-Add the rules you want to your `biome.json` or `biome.jsonc`:
+Add the plugin to your `biome.json` or `biome.jsonc`:
+
+```jsonc
+{
+  "plugins": ["biome-plugin-solidjs"]
+}
+```
+
+Or pick individual rules:
 
 ```jsonc
 {
@@ -29,12 +38,11 @@ Add the rules you want to your `biome.json` or `biome.jsonc`:
     "./node_modules/biome-plugin-solidjs/rules/solid-no-array-map-in-jsx.grit",
     "./node_modules/biome-plugin-solidjs/rules/solid-no-memo-in-loop.grit",
     "./node_modules/biome-plugin-solidjs/rules/solid-no-toplevel-effect.grit",
-    "./node_modules/biome-plugin-solidjs/rules/solid-no-stored-jsx.grit"
+    "./node_modules/biome-plugin-solidjs/rules/solid-no-stored-jsx.grit",
+    "./node_modules/biome-plugin-solidjs/rules/solid-no-object-signal-without-equals.grit"
   ]
 }
 ```
-
-Pick only the rules relevant to your project — you don't have to use all of them.
 
 ## Requirements
 
