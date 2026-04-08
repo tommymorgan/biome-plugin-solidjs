@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2
+
+### Changed
+
+- `solid-no-object-signal-without-equals` removed from the default manifest. The rule is still included in the package for opt-in use, but GritQL lacks the call-pattern analysis needed to distinguish genuine bugs (auth/session signals set from multiple sources) from harmless set-once-then-clear patterns.
+
 ## 0.2.1
 
 ### Fixed

@@ -11,7 +11,14 @@ Biome [GritQL](https://biomejs.dev/linter/plugins/) lint rules for [SolidJS](htt
 | `solid-no-memo-in-loop` | Flags `createMemo()` inside `.map()`, `.forEach()`, and other array method callbacks. |
 | `solid-no-toplevel-effect` | Flags `createEffect()` and `createMemo()` at module scope, where they have no reactive owner and will leak. |
 | `solid-no-stored-jsx` | Flags JSX stored in module-scope variables. Solid JSX compiles to real DOM operations, not virtual DOM descriptors. |
-| `solid-no-object-signal-without-equals` | Flags `createSignal` with an object type parameter but no custom `equals` function. Reference equality can cause unnecessary reactive updates. |
+
+### Opt-in rules
+
+These rules are included in the package but not enabled by the manifest. Add them individually if they match your codebase:
+
+| Rule | Description |
+|------|-------------|
+| `solid-no-object-signal-without-equals` | Flags `createSignal<Type \| null>()` without a custom `equals` function. Catches auth/session signals where the same entity arrives with different references, but may false-positive on set-once-then-clear patterns. |
 
 ## Install
 
@@ -29,16 +36,12 @@ Add the plugin to your `biome.json` or `biome.jsonc`:
 }
 ```
 
-Or pick individual rules:
+To also enable the opt-in rule:
 
 ```jsonc
 {
   "plugins": [
-    "./node_modules/biome-plugin-solidjs/rules/solid-no-destructured-props.grit",
-    "./node_modules/biome-plugin-solidjs/rules/solid-no-array-map-in-jsx.grit",
-    "./node_modules/biome-plugin-solidjs/rules/solid-no-memo-in-loop.grit",
-    "./node_modules/biome-plugin-solidjs/rules/solid-no-toplevel-effect.grit",
-    "./node_modules/biome-plugin-solidjs/rules/solid-no-stored-jsx.grit",
+    "./node_modules/biome-plugin-solidjs",
     "./node_modules/biome-plugin-solidjs/rules/solid-no-object-signal-without-equals.grit"
   ]
 }

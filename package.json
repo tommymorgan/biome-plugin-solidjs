@@ -1,6 +1,6 @@
 {
 	"name": "biome-plugin-solidjs",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "Biome GritQL lint rules for SolidJS — catches common reactivity bugs at lint time",
 	"license": "MIT",
 	"author": "Tommy Morgan",
