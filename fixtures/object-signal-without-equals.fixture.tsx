@@ -14,10 +14,21 @@ interface Session {
 	userId: string;
 }
 
-// ❌ Object type without custom equals — reference equality will cause spurious updates
+interface Item {
+	id: number;
+	name: string;
+}
+
+interface Message {
+	text: string;
+}
+
+type Step = 1 | 2 | 3 | 4;
+
+// ❌ Object type union with null — high risk for spurious updates
 const [user, setUser] = createSignal<User | null>(null);
 
-// ❌ Named type without equals
+// ✅ Named object type without nullable union — lower risk, not flagged
 const [session, setSession] = createSignal<Session>(getInitialSession());
 
 // ✅ Custom equals prevents spurious updates
@@ -36,6 +47,14 @@ const [label, setLabel] = createSignal<string>("hello");
 
 // ✅ false as equals — intentional "always notify" pattern
 const [data, setData] = createSignal<User | null>(null, { equals: false });
+
+// ✅ Array types — always replaced wholesale, custom equals not needed
+const [items, setItems] = createSignal<Item[]>([]);
+const [messages, setMessages] = createSignal<Message[]>([]);
+const [ids, setIds] = createSignal<Array<number>>([]);
+
+// ✅ Literal union type alias — primitive at runtime
+const [step, setStep] = createSignal<Step>(1);
 
 function getInitialSession(): Session {
 	return { token: "", userId: "" };

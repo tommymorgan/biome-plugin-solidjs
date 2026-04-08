@@ -25,7 +25,7 @@ Add the plugin to your `biome.json` or `biome.jsonc`:
 
 ```jsonc
 {
-  "plugins": ["biome-plugin-solidjs"]
+  "plugins": ["./node_modules/biome-plugin-solidjs"]
 }
 ```
 

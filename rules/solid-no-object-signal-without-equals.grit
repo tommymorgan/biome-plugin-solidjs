@@ -1,21 +1,30 @@
 engine biome(1.0)
 language js(typescript)
 
-// SolidJS: createSignal with object types uses reference equality (===) by default.
-// When holding objects (e.g., User | null), calling the setter with a structurally
-// equivalent but referentially different object triggers all downstream reactive
-// consumers unnecessarily. Consider adding a custom `equals` function.
+// SolidJS: createSignal with nullable object types uses reference equality (===)
+// by default. When holding objects like User | null, calling the setter with a
+// structurally equivalent but referentially different object (e.g., from API
+// responses or localStorage parsing) triggers all downstream reactive consumers
+// unnecessarily. Consider adding a custom `equals` function.
+//
+// Only flags signals typed as `ObjectType | null` or `ObjectType | undefined` —
+// these are the highest-risk patterns. Array signals, standalone object types,
+// and primitive unions are not flagged.
 
 JsCallExpression() as $call where {
 	$call <: contains JsReferenceIdentifier() as $callee where {
 		$callee <: `createSignal`
 	},
-	$call <: contains TsTypeArguments() as $typeArgs where {
-		$typeArgs <: contains TsReferenceType()
+	$call <: contains TsUnionType() as $union where {
+		$union <: contains TsReferenceType(),
+		or {
+			$union <: contains TsNullLiteralType(),
+			$union <: contains TsUndefinedType()
+		}
 	},
 	! $call <: contains `equals`,
 	register_diagnostic(
 		span = $call,
-		message = "SolidJS: `createSignal` with an object type uses reference equality by default. Consider adding a custom `equals` function to prevent unnecessary reactive updates when the object is replaced with a structurally equivalent value."
+		message = "SolidJS: `createSignal` with a nullable object type uses reference equality by default. Consider adding a custom `equals` function to prevent unnecessary reactive updates when the object is replaced with a structurally equivalent value."
 	)
 }

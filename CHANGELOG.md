@@ -1,13 +1,20 @@
 # Changelog
 
+## 0.2.1
+
+### Fixed
+
+- `solid-no-object-signal-without-equals` narrowed to only flag nullable object types (`Type | null`, `Type | undefined`). Array signals, standalone object types, and primitive union aliases are no longer flagged.
+- README setup instructions corrected to use `./node_modules/` prefix for manifest-based plugin reference, matching Biome's resolution behavior.
+
 ## 0.2.0
 
 ### Added
 
-- New rule: `solid-no-object-signal-without-equals` — warns when `createSignal` has an object type parameter but no custom `equals` function, which can cause unnecessary reactive updates due to reference equality.
+- New rule: `solid-no-object-signal-without-equals` — warns when `createSignal` has a nullable object type parameter but no custom `equals` function, which can cause unnecessary reactive updates due to reference equality.
 - `biome-manifest.jsonc` so the plugin can be referenced by package name in `biome.json`:
   ```json
-  { "plugins": ["biome-plugin-solidjs"] }
+  { "plugins": ["./node_modules/biome-plugin-solidjs"] }
   ```
 
 ### Fixed

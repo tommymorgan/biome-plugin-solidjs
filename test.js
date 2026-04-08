@@ -74,10 +74,10 @@ describe("solid-no-stored-jsx", () => {
 });
 
 describe("solid-no-object-signal-without-equals", () => {
-	it("flags createSignal with object type but no custom equals", async () => {
+	it("flags createSignal with nullable object type but no custom equals", async () => {
 		const output = await lint(
 			"fixtures/object-signal-without-equals.fixture.tsx",
 		);
-		assert.equal(countPluginHits(output), 2);
+		assert.equal(countPluginHits(output), 1);
 	});
 });
