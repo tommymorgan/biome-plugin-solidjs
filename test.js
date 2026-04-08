@@ -36,6 +36,13 @@ describe("solid-no-destructured-props", () => {
 		const output = await lint("fixtures/destructured-props.fixture.tsx");
 		assert.ok(output.includes(":13:"));
 	});
+
+	it("does not flag destructured params in vitest .extend() callbacks", async () => {
+		const output = await lint(
+			"fixtures/destructured-props-extend.fixture.tsx",
+		);
+		assert.equal(countPluginHits(output), 0);
+	});
 });
 
 describe("solid-no-array-map-in-jsx", () => {
@@ -62,6 +69,15 @@ describe("solid-no-toplevel-effect", () => {
 describe("solid-no-stored-jsx", () => {
 	it("flags JSX stored in module-scope variables", async () => {
 		const output = await lint("fixtures/stored-jsx.fixture.tsx");
+		assert.equal(countPluginHits(output), 2);
+	});
+});
+
+describe("solid-no-object-signal-without-equals", () => {
+	it("flags createSignal with object type but no custom equals", async () => {
+		const output = await lint(
+			"fixtures/object-signal-without-equals.fixture.tsx",
+		);
 		assert.equal(countPluginHits(output), 2);
 	});
 });

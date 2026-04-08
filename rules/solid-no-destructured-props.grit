@@ -11,12 +11,15 @@ language js(typescript, jsx)
 
 or {
 	// Arrow function component: const Comp = ({ value }) => <div>...</div>
-	// Only matches destructuring in the parameter list
+	// Only matches destructuring in the parameter list.
+	// Excludes arrow functions that are object property values (e.g., vitest
+	// .extend() fixture callbacks), since those aren't component definitions.
 	JsArrowFunctionExpression() as $arrow where {
 		$arrow <: contains JsParameters() as $params where {
 			$params <: contains JsObjectBindingPattern() as $pattern
 		},
 		$arrow <: contains JsxOpeningElement(),
+		! $arrow <: within JsPropertyObjectMember(),
 		register_diagnostic(
 			span = $pattern,
 			message = "SolidJS: Do not destructure props. Props are reactive getter objects — destructuring breaks reactivity. Use `props` parameter and access `props.value`, or use `splitProps()`."

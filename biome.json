@@ -18,6 +18,7 @@
 		"./rules/solid-no-array-map-in-jsx.grit",
 		"./rules/solid-no-memo-in-loop.grit",
 		"./rules/solid-no-toplevel-effect.grit",
-		"./rules/solid-no-stored-jsx.grit"
+		"./rules/solid-no-stored-jsx.grit",
+		"./rules/solid-no-object-signal-without-equals.grit"
 	]
 }
